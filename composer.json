@@ -1,0 +1,66 @@
+{
+    "name": "techtailor/laravel-paytm",
+    "description": "A Laravel wrapper for the Paytm Payment Gateway (PG). Now quickly setup and accept UPI, Credit/Debit Card, Net Banking & EMI payments via Paytm PG starting today.",
+    "keywords": [
+        "TechTailor",
+        "laravel",
+        "laravel-paytm",
+        "laravel paytm",
+        "paytm",
+        "paytm pg",
+        "paytm payment gate",
+        "paytm wrapper",
+        "paytm php",
+        "laravel payment gateway"
+    ],
+    "homepage": "https://github.com/TechTailor/Laravel-Paytm",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Moinuddin S. Khaja",
+            "email": "hello@moinuddin.dev",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "illuminate/contracts": "^9.0",
+        "paytm/paytmchecksum": "^1.1",
+        "spatie/laravel-package-tools": "^1.9.2"
+    },
+    "require-dev": {
+        "nunomaduro/collision": "^6.0",
+        "nunomaduro/larastan": "^2.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "TechTailor\\Paytm\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TechTailor\\Paytm\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TechTailor\\Paytm\\PaytmServiceProvider"
+            ],
+            "aliases": {
+                "Paytm": "TechTailor\\Paytm\\Facades\\Paytm"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
