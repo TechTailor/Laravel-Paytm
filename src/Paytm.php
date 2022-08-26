@@ -14,10 +14,13 @@ class Paytm
      *
      * @return array $result
      */
-    public function getTransactionToken($amount, $customer)
+    public function getTransactionToken($amount, $customer, $callback = null)
     {
         // Generate a unique order id using the order_id_prefix.
         $newOrderId = config('paytm.order_id_prefix').time();
+
+        // Get the user provided callback or fetch the default one from the config file.
+        $callback = $callback ?? config('paytm.callback_url');
 
         // Prepare the JSON string for request.
         $paytmParams['body'] = [
@@ -25,7 +28,7 @@ class Paytm
             'mid' 			      => config('paytm.merchant.id'), // Paytm Merchant ID
             'websiteName' 	=> config('paytm.website'), // Paytm Website
             'orderId' 		   => $newOrderId,
-            'callbackUrl' 	=> config('paytm.callback_url'), // Callback url for processing responses from paytm
+            'callbackUrl' 	=> $callback, // Callback url for processing responses from paytm
             'txnAmount' 	  => [
                 'value'    => $amount,
                 'currency' => 'INR', // Only INR Supported

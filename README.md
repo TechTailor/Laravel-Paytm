@@ -70,8 +70,12 @@ $customer = array(
     'lastName' => $lastName // OPTIONAL
 );
 
+// This is an optional url which you can pass to customize the callback url per transaction. 
+// If null is provided, the app will use the callback url set in the config/paytm.php file.
+$callback = 'https://yourwebsite.com/callback/new';
+
 // Call the getTransactionToken function.
-$response = Paytm::getTransactionToken($amount, $customer);
+$response = Paytm::getTransactionToken($amount, $customer, $callback);
 ``` 
 The **$response** will return an array containing:
 ```php
