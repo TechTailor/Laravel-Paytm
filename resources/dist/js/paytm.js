@@ -1,4 +1,4 @@
-function openJsCheckoutPopup(orderId, txnToken, amount) {
+function openJsCheckoutPopup(orderId, txnToken, amount, redirect) {
     var config = {
         "root": "",
         "flow": "DEFAULT",
@@ -9,13 +9,15 @@ function openJsCheckoutPopup(orderId, txnToken, amount) {
             "amount": amount
         },
         "merchant": {
-            "redirect": true
+            "redirect": redirect ?? true
         },
         "handler": {
-            "notifyMerchant": function (eventName, data) {
-                console.log("notifyMerchant handler function called");
+            notifyMerchant: function notifyMerchant(eventName, data) {
                 console.log("eventName => ", eventName);
-                console.log("data => ", data);
+                // console.log("data => ", data); // only enable for debugging
+            },
+            transactionStatus: function transactionStatus(paymentStatus) {
+                paymentCompleted(paymentStatus); // only called when redirect is set to false
             }
         }
     };
