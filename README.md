@@ -103,7 +103,14 @@ Start by adding the `@paytmScripts` tag into the `<head>` tag of your page. For 
   @paytmScripts
 </head>
 ```
-Next, to initiate the Checkout Payment Page, you need to callout `openJsCheckoutPopup(orderId, txnToken, amount)` and pass it the `orderId`, `txntoken` and the `amount` received in **Step # 1**.
+
+Next, to initiate the Checkout Payment Page, you have 2 available methods -
+
+##### Method # 1 
+
+This method will invoke the payment gateway and upon completion, will redirect the user to the callback url set earlier (or in the config file). 
+
+To achieve that, you need to call the `openJsCheckoutPopup(orderId, txnToken, amount)` function and pass it the `orderId`, `txntoken` and the `amount` received in **Step # 1**.
 
 ```php
 // Somewhere in your page 
@@ -122,8 +129,36 @@ Next, to initiate the Checkout Payment Page, you need to callout `openJsCheckout
 ```
 Upon clicking the `Pay Now` button, a pop-up for the Paytm PG will open with all the options to make the payment. Once the payment is complete, you will be redirected to the `callback_url` set in the .env file as `PAYTM_CALLBACK_URL`.
 
-### Step # 3 - Receiving Callback
-The **callback** from the Paytm PG will provide an array containing the following (for a successful transaction) -
+##### Method # 2
+
+This method will allow you to handle the response on the same page (and ignore any callback urls set for this transaction). Useful when you want to process transaction without a redirect.
+
+```php
+// Somewhere in your page 
+ <button type="button" id="JsCheckoutPayment" name="submit" class="btn btn-primary">Pay Now</button>
+
+// Before the closing </body> tag
+<script type="application/javascript">
+      document.getElementById("JsCheckoutPayment").addEventListener("click", function() {
+              var orderId = "{{ $response['orderId'] }}";
+              var txnToken = "{{ $response['txnToken'] }}";
+              var amount = "{{ $response['amount'] }}";
+              // Pass an additional "false" attribute which marks redirect as false. 
+              openJsCheckoutPopup(orderId, txnToken, amount, false);
+          }
+      );
+
+      // To be executed upon completion of the payment (only if false is passed above).
+      function paymentCompleted(paymentStatus) {
+          window.Paytm.CheckoutJS.close(); // Close the Paytm PG Pop-up.
+          console.log(paymentStatus); // Log or use the payment status/details returned.
+      }
+</script>
+```
+Once you set the redirect flag as false, you can use the `paymentCompleted` function to excute further queries using the returned data.
+
+### Step # 3 - Receiving Response
+The **response** from the Paytm PG (via callback or same page) will provide an array containing the following (for a successful transaction) -
 ```php
 array:14 [▼
   "BANKNAME" => "State Bank of India"
